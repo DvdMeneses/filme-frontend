@@ -1,0 +1,3 @@
+export const environment = {
+  tmdbApiKey: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZmE0OTU0OTVjMmYwNTU2OWI4ZmZkMDllMmQ1NjYxZiIsIm5iZiI6MTczNzMyNTg5OC40Njg5OTk5LCJzdWIiOiI2NzhkN2Q0YTY4ZTBkODczNjM2ZTEwOTkiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.l1tR9wpmCpoP8A2ne9pREvZ58_QxKzphI5Lt_Fsthuw'
+};

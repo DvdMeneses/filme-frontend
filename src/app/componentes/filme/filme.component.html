@@ -1,0 +1,107 @@
+<div class="container-carousel">
+  <div class="title-carousel-main">
+    <h2>Meus Filmes</h2>
+ <hr>
+  </div>
+  <p-carousel [value]="filmes" [numVisible]="5" [numScroll]="1" [circular]="true" autoplayInterval="4000">
+    <ng-template let-filme pTemplate="item">
+      <div class="card-itens">
+        <div class="filme-item">
+          <div class="filme-card">
+            <!-- Botão de menu no canto superior esquerdo -->
+            <div class="card-actions">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+
+              <button mat-menu-item (click)="openTrailer(filme.trailer)">
+                <mat-icon>play_arrow</mat-icon>
+                <span>Ver Trailer</span>
+              </button>
+              <a [routerLink]="['/meusFilmes', filme._id]" style="text-decoration: none;">
+                <button mat-menu-item >
+                  <mat-icon>info</mat-icon>
+                  <span>Mais informações</span>
+                </button>
+              </a>
+              </mat-menu>
+            </div>
+            <div class="filme-img">
+              <img [src]="filme.image_url" alt="Imagem do Filme">
+            </div>
+            <a [routerLink]="['/filmes/', filme._id]" class="filme-img-link">
+              <div class="filme-info ff-inter">
+                <h3>{{ filme.title }}</h3>
+                <div class="description">{{ filme.description.length > 100 ? (filme.description | slice:0:100) + '...' : filme.description  }}</div>
+                <div class="stars">
+                  <fa-icon *ngFor="let star of [].constructor(calculateStars(filme.score).fullStars); let i = index" [icon]="faStar"></fa-icon>
+                  <fa-icon *ngIf="calculateStars(filme.score).halfStar" [icon]="faStarHalfAlt"></fa-icon>
+                  <fa-icon *ngFor="let star of [].constructor(calculateStars(filme.score).emptyStars); let i = index" [icon]="faStarOutline"></fa-icon>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>
+
+<div class="container-generes-carousel">
+  <div class="generes-carousel" *ngFor="let genre of genres">
+  <div class="title-carousel" >
+    <h2 [ngStyle]="{ 'background-color': genre.backgroundColor || getGenreColor(genre.name) }">{{ genre.name }}</h2>
+    <hr>
+  </div>
+  <p-carousel [value]="groupedMovies[genre.id]" [numVisible]="7" [numScroll]="2" [circular]="true">
+    <ng-template let-filme pTemplate="item">
+      <div class="card-itens">
+        <div class="filme-item">
+          <div class="filme-card">
+
+            <div class="card-actions" *ngIf="filme?.trailer">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+
+              <mat-menu #menu="matMenu">
+                <!-- Conditionally display the 'Ver Trailer' option if a trailer exists -->
+                <button mat-menu-item>
+                  <mat-icon>play_arrow</mat-icon>
+                  <span>Ver Trailer</span>
+                </button>
+
+                <!-- Display 'Mais informações' option, always available -->
+                <button mat-menu-item (click)="{}">
+                  <mat-icon>info</mat-icon>
+                  <span>Mais informações</span>
+                </button>
+              </mat-menu>
+            </div>
+            <a (click)="openTrailer(filme.trailer)">
+              <div class="filme-img">
+                <img [src]="'https://image.tmdb.org/t/p/w500/' + filme.poster_path" alt="Imagem do Filme">
+              </div>
+            </a>
+            <a [routerLink]="['/filmes/', filme.id]" class="filme-img-link">
+              <div class="filme-info ff-inter">
+                <h3>{{ filme.title }}</h3>
+                <div class="description">
+                  {{ filme.overview.length > 100 ? (filme.overview | slice: 0: 100) + '...' : filme.overview }}
+                </div>
+                <div class="stars">
+                  <fa-icon *ngFor="let star of [].constructor(calculateStars(filme.vote_average).fullStars)" [icon]="faStar"></fa-icon>
+                  <fa-icon *ngIf="calculateStars(filme.vote_average).halfStar" [icon]="faStarHalfAlt"></fa-icon>
+                  <fa-icon *ngFor="let star of [].constructor(calculateStars(filme.vote_average).emptyStars)" [icon]="faStarOutline"></fa-icon>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>
+</div>
+

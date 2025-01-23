@@ -1,0 +1,97 @@
+<!-- Mensagem de Sucesso -->
+<div *ngIf="successMessage" class="alert alert-success">
+  {{ successMessage }}
+</div>
+
+<!-- Mensagem de Erro -->
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
+<div class="container-cadastro">
+  <div class="filme-preview">
+    <div class="filme-card">
+      <a (click)="openTrailer(movieForm.value.trailer)">
+        <div class="filme-img">
+          <img
+            [src]="movieForm.value.image_url || defaultImageUrl"
+            alt="Imagem do Filme"
+            (error)="onImageError($event)">
+          <div class="play-overlay" (click)="openTrailer(movieForm.value.trailer)">
+            <img src="/video.png" alt="Play">
+          </div>
+        </div>
+      </a>
+      <div class="filme-info ff-inter">
+        <h3>{{ movieForm.value.title }}</h3>
+        <div class="description">{{ movieForm.value.description.length > 100 ? (movieForm.value.description | slice:0:100) + '...': movieForm.value.description }}</div>
+        <!-- Estrelas -->
+        <div class="stars">
+          <fa-icon *ngFor="let star of [].constructor(calculateStars(movieForm.value.score).fullStars)" [icon]="faStar"></fa-icon>
+          <fa-icon *ngIf="calculateStars(movieForm.value.score).halfStar" [icon]="faStarHalfAlt"></fa-icon>
+          <fa-icon *ngFor="let star of [].constructor(calculateStars(movieForm.value.score).emptyStars)" [icon]="faStarOutline"></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<form class="form" [formGroup]="movieForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="title">Título</label>
+    <input id="title" formControlName="title" type="text" placeholder="Nome do filme">
+    <div *ngIf="movieForm.get('title')?.invalid && movieForm.get('title')?.touched" class="error-message">
+      O título é obrigatório.
+    </div>
+  </div>
+
+  <div>
+    <label for="description">Descrição</label>
+    <textarea id="description" formControlName="description" type="text" placeholder="Descrição do filme"></textarea>
+    <div *ngIf="movieForm.get('description')?.invalid && movieForm.get('description')?.touched" class="error-message">
+      A descrição é obrigatória.
+    </div>
+  </div>
+
+  <div>
+    <label for="score">Nota</label>
+    <input
+      id="score"
+      formControlName="score"
+      type="number"
+      min="0"
+      max="10"
+      placeholder="Nota de 1 a 10"
+      (input)="validateScore($event)">
+    <div *ngIf="movieForm.get('score')?.invalid && movieForm.get('score')?.touched" class="error-message">
+      A nota deve estar entre 0 e 10.
+    </div>
+  </div>
+
+  <div>
+    <label for="image_url">Imagem</label>
+    <input id="image_url" formControlName="image_url" type="text" placeholder="URL da imagem">
+    <div *ngIf="movieForm.get('image_url')?.invalid && movieForm.get('image_url')?.touched" class="error-message">
+      Forneça uma URL válida para a imagem.
+    </div>
+  </div>
+
+  <div>
+    <label for="trailer">Trailer</label>
+    <input id="trailer" formControlName="trailer" type="text" placeholder="URL do trailer">
+    <div *ngIf="movieForm.get('trailer')?.invalid && movieForm.get('trailer')?.touched" class="error-message">
+      Forneça uma URL válida para o trailer.
+    </div>
+  </div>
+
+  <div>
+    <label for="year">Ano</label>
+    <input id="year" formControlName="year" type="text" placeholder="Ano de lançamento">
+    <div *ngIf="movieForm.get('year')?.invalid && movieForm.get('year')?.touched" class="error-message">
+      O ano é obrigatório.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="movieForm.invalid">Cadastrar</button>
+  <button type="button" (click)="goToMeusFilmes()">Cancelar</button>
+</form>
+

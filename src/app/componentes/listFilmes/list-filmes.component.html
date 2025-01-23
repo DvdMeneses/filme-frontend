@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterFilmes()"
+      placeholder="Pesquise por nome, ano ou nota..."
+      class="search-input"
+    />
+  </div>
+  <div *ngFor="let filme of filteredFilmes" class="card" [id]="filme._id">
+  <div class="image-container">
+    <img [src]="filme.image_url" alt="{{ filme.title }}" class="card-image" />
+  </div>
+
+  <div class="card-content">
+    <h3>{{ filme.title }}</h3>
+    <p>{{ filme.description }}</p>
+    <p><strong>Ano de lançamento:</strong> {{ filme.year }}</p>
+    <p><strong>Nota:</strong> {{ filme.score }}</p>
+    <a [href]="filme.trailer" target="_blank">
+      <div class="container-trailer-link">
+        <img src="/youtube.png" alt="Play" />
+        <p class="trailer-link">Ver Trailer</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="card-actions">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="editFilme(filme)">
+        <mat-icon>edit</mat-icon>
+        <span>Editar</span>
+      </button>
+      <button mat-menu-item (click)="deleteFilme(filme._id)">
+        <mat-icon>delete</mat-icon>
+        <span>Deletar</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
